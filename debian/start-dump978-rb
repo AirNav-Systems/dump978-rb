@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Helper script that reads /etc/default/dump978-rb
+# and either starts dump1090-fa with the configured
+# arguments, or exits with status 64 to tell systemd
+# not to auto-restart the service.
+
+if [ -f /etc/default/dump978-rb ]
+then
+    . /etc/default/dump978-rb
+fi
+
+if [ "x$ENABLED" != "xyes" ]
+then
+    echo "dump978-rb not enabled in /etc/default/dump978-rb" >&2
+    exit 64
+fi
+
+exec /usr/bin/dump978-rb \
+     $RECEIVER_OPTIONS $DECODER_OPTIONS $NET_OPTIONS \
+     "$@"
+# exec failed, do not restart
+exit 64

@@ -1,0 +1,10 @@
+# dump978-rb configuration
+# This is sourced by /usr/share/dump978-rb/start-dump978-rb as a
+# shellscript fragment.
+
+# dump978-rb won't automatically start unless ENABLED=yes
+ENABLED=yes
+
+RECEIVER_OPTIONS="--sdr driver=rtlsdr --format CS8"
+DECODER_OPTIONS=""
+NET_OPTIONS="--raw-port 30978 --json-port 28380"
