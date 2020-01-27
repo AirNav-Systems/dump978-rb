@@ -1,2 +1,2 @@
-dump978-rb usr/bin/
+dump978-rb usr/local/bin/
 debian/start-dump978-rb /usr/share/dump978-rb/
