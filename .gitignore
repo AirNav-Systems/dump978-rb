@@ -1,6 +1,11 @@
 *~
 *.o
 dump978-rb
-skyview978
-faup978
 nbproject
+debian/debhelper-build-stamp
+debian/dump978-rb.debhelper.log
+debian/dump978-rb.postinst.debhelper
+debian/dump978-rb.postrm.debhelper
+debian/dump978-rb.prerm.debhelper
+debian/dump978-rb.substvars
+

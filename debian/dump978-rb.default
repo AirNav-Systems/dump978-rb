@@ -5,6 +5,6 @@
 # dump978-rb won't automatically start unless ENABLED=yes
 ENABLED=yes
 
-RECEIVER_OPTIONS="--sdr driver=rtlsdr,serial=00000401 --format CS8"
+RECEIVER_OPTIONS="--sdr driver=rtlsdr,serial=00000401 --sdr-auto-gain --format CS8"
 DECODER_OPTIONS=""
 NET_OPTIONS="--raw-port 30978 --json-port 28380"

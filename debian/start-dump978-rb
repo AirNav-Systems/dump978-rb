@@ -16,7 +16,7 @@ then
     exit 64
 fi
 
-exec /usr/local/bin/dump978-rb \
+exec /usr/bin/dump978-rb \
      $RECEIVER_OPTIONS $DECODER_OPTIONS $NET_OPTIONS \
      "$@"
 # exec failed, do not restart
