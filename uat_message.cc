@@ -28,16 +28,22 @@ std::ostream &airnav::uat::operator<<(std::ostream &os, const RawMessage &messag
     case MessageType::UPLINK:
         os << '+';
         break;
+    case MessageType::METADATA:
+        os << '!';
+        break;
     default:
         throw std::logic_error("unexpected message type");
     }
 
-    os << std::setfill('0');
-    for (auto b : message.Payload()) {
-        os << std::hex << std::setw(2) << (int)b;
+    if (message.Type() != MessageType::METADATA) {
+        os << std::setfill('0');
+        for (auto b : message.Payload()) {
+            os << std::hex << std::setw(2) << (int)b;
+        }
+
+        os << ";";
     }
 
-    os << ";";
     if (message.Errors() > 0) {
         os << "rs=" << std::dec << std::setw(0) << message.Errors() << ';';
     }
@@ -50,6 +56,10 @@ std::ostream &airnav::uat::operator<<(std::ostream &os, const RawMessage &messag
     if (message.RawTimestamp() != 0) {
         os << "rt=" << std::dec << std::setw(0) << message.RawTimestamp() << ';';
     }
+    for (auto &i : message.Metadata()) {
+        os << i.first << '=' << i.second << ';';
+    }
+
     return os;
 }
 
@@ -336,6 +346,8 @@ void AdsbMessage::DecodeTS(const RawMessage &raw, unsigned startbyte) {
     // 34,6 .. 34,8 reserved
 }
 
+static inline bool IsOctal(char ch) { return (ch >= '0' && ch <= '7'); }
+
 void AdsbMessage::DecodeMS(const RawMessage &raw) {
     static const char *base40_alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ *??";
     auto raw1 = raw.Bits(18, 1, 19, 8);
@@ -365,7 +377,14 @@ void AdsbMessage::DecodeMS(const RawMessage &raw) {
                     7)) { // CSID field, 1 = callsign, 0 = flightplan ID (aka squawk)
             callsign.emplace(std::move(raw_callsign));
         } else {
-            flightplan_id.emplace(std::move(raw_callsign));
+            // Enforce 4 digit octal squawk
+            if (raw_callsign.size() == 4 &&
+                IsOctal(raw_callsign[0]) &&
+                IsOctal(raw_callsign[1]) &&
+                IsOctal(raw_callsign[2]) &&
+                IsOctal(raw_callsign[3])) {
+                    flightplan_id.emplace(std::move(raw_callsign));
+            }
         }
     }
 

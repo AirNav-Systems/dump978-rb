@@ -6,6 +6,7 @@
 
 #include <assert.h>
 #include <cmath>
+#include <stdexcept>
 
 using namespace airnav::uat;
 

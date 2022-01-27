@@ -7,8 +7,10 @@
 #ifndef UAT_PROTOCOL_H
 #define UAT_PROTOCOL_H
 
+#include <cstdint>
+
 namespace airnav::uat {
-    enum class MessageType { DOWNLINK_SHORT, DOWNLINK_LONG, UPLINK, INVALID };
+    enum class MessageType { DOWNLINK_SHORT, DOWNLINK_LONG, UPLINK, METADATA, INVALID };
 
     const unsigned SYNC_BITS = 36;
     const std::uint64_t DOWNLINK_SYNC_WORD = 0xEACDDA4E2UL;

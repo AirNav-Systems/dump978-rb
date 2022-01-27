@@ -4,7 +4,7 @@ node(label: 'raspberrypi') {
         durabilityHint(hint: 'PERFORMANCE_OPTIMIZED')
     ])
 
-    def dists = ["buster", "stretch"]
+    def dists = ["bullseye", "buster", "stretch"]
     def srcdir = "${WORKSPACE}/src"
 
     stage('Checkout') {
@@ -35,7 +35,7 @@ node(label: 'raspberrypi') {
         }
 
         stage("Test install on ${dist}") {
-            sh "BRANCH=${env.BRANCH_NAME} /build/pi-builder/scripts/validate-packages.sh ${dist} ${results}/dump978-rb_*.deb ${results}/skyaware978_*.deb ${results}/skyview978_*.deb"
+            sh "BRANCH=${env.BRANCH_NAME} /build/pi-builder/scripts/validate-packages.sh ${dist} ${results}/dump978-fa_*.deb ${results}/skyaware978_*.deb ${results}/skyview978_*.deb"
         }
     }
 

@@ -2,10 +2,10 @@ Source: dump978-rb
 Section: embedded
 Priority: extra
 Maintainer: Airnav <support@radarbox24.com>
-Build-Depends: debhelper(>=9), dh-systemd, libboost-system-dev, libboost-program-options-dev, libboost-regex-dev, libboost-filesystem-dev, libsoapysdr-dev
+Build-Depends: debhelper(>=10), libboost-system-dev, libboost-program-options-dev, libboost-regex-dev, libboost-filesystem-dev, libsoapysdr-dev
 Standards-Version: 3.9.3
 Homepage: http://www.airnavsystems.com
-Vcs-Git: https://git.rb24.com/jmaurin/dump978-rb
+Vcs-Git: https://github.com/AirNav-Systems/dump978-rb
 
 Package: dump978-rb
 Architecture: any

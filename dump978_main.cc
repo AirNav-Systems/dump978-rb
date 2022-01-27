@@ -98,6 +98,7 @@ static int realmain(int argc, char **argv) {
         ("sdr-device-settings", po::value<std::string>(), "set SDR device key-value settings")
         ("stratuxv3", po::value<std::string>(), "read messages from Stratux v3 UAT dongle on given serial port")
         ("raw-port", po::value<std::vector<listen_option>>(), "listen for connections on [host:]port and provide raw messages")
+        ("raw-legacy-port", po::value<std::vector<listen_option>>(), "listen for connections on [host:]port and provide raw messages, with no initial metadata header")
         ("json-port", po::value<std::vector<listen_option>>(), "listen for connections on [host:]port and provide decoded json");
     // clang-format on
 
@@ -184,9 +185,29 @@ static int realmain(int argc, char **argv) {
         return ok;
     };
 
-    auto raw_ok = create_output_port("raw-port", &RawOutput::Create);
+    // Emit initial metadata-only message advertising our version etc
+    SharedMessageVector header;
+    if (!opts.count("raw-disable-header")) {
+        header = std::make_shared<MessageVector>();
+
+        // clang-format off
+        RawMessage::MetadataMap metadata = {
+            {"program", "dump978-rb"},
+            {"version", VERSION},
+            {"fecfix", "1"} // we have a fixed version of the FEC library
+        };
+        // clang-format on
+        header->push_back(RawMessage(std::move(metadata)));
+    }
+
+    auto raw_factory = std::bind(&RawOutput::Create, std::placeholders::_1, std::placeholders::_2, header);
+    auto raw_ok = create_output_port("raw-port", raw_factory);
+
+    auto raw_legacy_factory = std::bind(&RawOutput::Create, std::placeholders::_1, std::placeholders::_2, SharedMessageVector());
+    auto raw_legacy_ok = create_output_port("raw-legacy-port", raw_legacy_factory);
+
     auto json_ok = create_output_port("json-port", &JsonOutput::Create);
-    if (!raw_ok || !json_ok) {
+    if (!raw_ok || !raw_legacy_ok || !json_ok) {
         return 1;
     }
 

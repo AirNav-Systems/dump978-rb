@@ -55,13 +55,17 @@ namespace airnav::uat {
     class RawOutput : public SocketOutput {
       public:
         // factory method, this class must always be constructed via make_shared
-        static Pointer Create(boost::asio::io_service &service, boost::asio::ip::tcp::socket &&socket) { return Pointer(new RawOutput(service, std::move(socket))); }
+        static Pointer Create(boost::asio::io_service &service, boost::asio::ip::tcp::socket &&socket, SharedMessageVector header) { return Pointer(new RawOutput(service, std::move(socket), header)); }
+
+        void Start() override;
 
       protected:
         void InternalWrite(SharedMessageVector messages) override;
 
       private:
-        RawOutput(boost::asio::io_service &service_, boost::asio::ip::tcp::socket &&socket_) : SocketOutput(service_, std::move(socket_)) {}
+        RawOutput(boost::asio::io_service &service_, boost::asio::ip::tcp::socket &&socket_, SharedMessageVector header) : SocketOutput(service_, std::move(socket_)) { header_ = header; }
+
+        SharedMessageVector header_;
     };
 
     class JsonOutput : public SocketOutput {

@@ -4,5 +4,8 @@ of the fec-3.0.1 library by Phil Karn.
 The full version of the library may be found at
 http://www.ka9q.net/code/fec/
 
+It additionally includes some bugfixes cherry-picked from
+https://github.com/fblomqvi/libfec/
+
 See README.fec for the original library README and license
 information.

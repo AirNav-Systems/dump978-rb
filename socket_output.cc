@@ -84,6 +84,12 @@ void SocketOutput::Close() {
 
 //////////////
 
+void RawOutput::Start() {
+    SocketOutput::Start();
+    if (header_)
+        Write(header_);
+}
+
 void RawOutput::InternalWrite(SharedMessageVector messages) {
     for (const auto &message : *messages) {
         Buf() << message << '\n';

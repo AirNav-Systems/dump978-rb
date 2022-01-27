@@ -7,6 +7,7 @@
 #define _FEC_RS_H_
 
 /* General purpose RS codec, 8-bit symbols */
+void encode_rs_char(void *rs,unsigned char *data,unsigned char *parity);
 int decode_rs_char(void *rs,unsigned char *data,int *eras_pos,
                    int no_eras);
 void *init_rs_char(int symsize,int gfpoly,

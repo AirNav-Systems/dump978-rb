@@ -20,7 +20,9 @@
 namespace airnav::uat {
     class RawMessage {
       public:
-        RawMessage() : type_(MessageType::INVALID), received_at_(0), errors_(0), rssi_(0) {}
+        using MetadataMap = std::map<std::string, std::string>;
+
+        RawMessage() : type_(MessageType::INVALID), received_at_(0), errors_(0), rssi_(0), raw_timestamp_(0) {}
 
         RawMessage(const Bytes &payload, std::uint64_t received_at, unsigned errors, float rssi, std::uint64_t raw_timestamp = 0) : payload_(payload), received_at_(received_at), errors_(errors), rssi_(rssi), raw_timestamp_(raw_timestamp) {
             switch (payload_.size()) {
@@ -56,6 +58,10 @@ namespace airnav::uat {
             }
         }
 
+        RawMessage(MetadataMap &&metadata) : type_(MessageType::METADATA), received_at_(0), errors_(0), rssi_(0.0), raw_timestamp_(0), metadata_(std::move(metadata)) {}
+
+        RawMessage(const MetadataMap &metadata) : type_(MessageType::METADATA), received_at_(0), errors_(0), rssi_(0.0), raw_timestamp_(0), metadata_(metadata) {}
+
         MessageType Type() const { return type_; }
 
         Bytes &Payload() { return payload_; }
@@ -69,6 +75,8 @@ namespace airnav::uat {
         float Rssi() const { return rssi_; }
 
         std::uint64_t RawTimestamp() const { return raw_timestamp_; }
+
+        const MetadataMap &Metadata() const { return metadata_; }
 
         // Number of raw bits in the message, excluding the sync bits
         unsigned BitLength() const {
@@ -149,6 +157,7 @@ namespace airnav::uat {
         unsigned errors_;
         float rssi_;
         std::uint64_t raw_timestamp_;
+        MetadataMap metadata_;
     };
 
     std::ostream &operator<<(std::ostream &os, const RawMessage &message);

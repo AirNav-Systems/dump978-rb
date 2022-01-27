@@ -3,6 +3,11 @@
  * May be used under the terms of the GNU Lesser General Public License (LGPL)
  */
 
+#define RS_ERROR_DEG_LAMBDA_ZERO -1
+#define RS_ERROR_IMPOSSIBLE_ERR_POS -2
+#define RS_ERROR_DEG_LAMBDA_NEQ_COUNT -3
+#define RS_ERROR_NOT_A_CODEWORD -4
+
 /* Reed-Solomon codec control block */
 struct rs {
   int mm;              /* Bits per symbol */

@@ -51,7 +51,7 @@ std::tuple<bool, Bytes, unsigned> FEC::CorrectDownlink(const Bytes &raw, const s
 
     int erasures_array[DOWNLINK_LONG_ROOTS];
     for (std::size_t i = 0; i < erasures.size(); ++i) {
-        erasures_array[i] = erasures[i] + DOWNLINK_LONG_PAD;
+        erasures_array[i] = erasures[i];
         corrected[erasures[i]] = 0;
     }
     int n_corrected = ::decode_rs_char(rs_downlink_long_, corrected.data(), erasures_array, erasures.size());
@@ -70,7 +70,7 @@ std::tuple<bool, Bytes, unsigned> FEC::CorrectDownlink(const Bytes &raw, const s
     for (auto e : erasures) {
         if (e < DOWNLINK_SHORT_BYTES) {
             if (short_erasures < DOWNLINK_SHORT_ROOTS) {
-                erasures_array[short_erasures] = e + DOWNLINK_SHORT_PAD;
+                erasures_array[short_erasures] = e;
             }
             ++short_erasures;
         }
