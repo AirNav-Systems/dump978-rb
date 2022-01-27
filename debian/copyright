@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: dump978
 Upstream-Contact: AirNav <support@radarbox24.com>
-Source: https://git.rb24.com/jmaurin/dump978-rb
+Source: https://github.com/AirNav-Systems/dump978-rb
 
 Files: *.cc *.h
 Copyright: Copyright 2015 Oliver Jowett <oliver@mutability.co.uk>
